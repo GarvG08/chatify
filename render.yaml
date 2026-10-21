@@ -1,0 +1,42 @@
+services:
+  - type: web
+    name: chatify-app
+    runtime: node
+    region: oregon
+    plan: free
+    rootDir: .
+    buildCommand: npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: SERVE_FRONTEND
+        value: "true"
+      - key: PORT
+        value: "3000"
+      # Set these in the Render dashboard — do NOT hardcode secrets here:
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: EMAIL_FROM
+        sync: false
+      - key: EMAIL_FROM_NAME
+        sync: false
+      - key: EMAIL_TEST_TO
+        sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: ARCJET_KEY
+        sync: false
+      - key: ARCJET_ENV
+        value: production
+      # CLIENT_URLS = your Render backend URL (same service, self-serving frontend)
+      - key: CLIENT_URLS
+        sync: false
