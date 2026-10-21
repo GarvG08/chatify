@@ -6,13 +6,16 @@ import { socketAuthMiddleware } from "../middleware/socket.auth.middleware.js";
 
 const app = express();
 const server = http.createServer(app);
-const allowedOrigins = (ENV.CLIENT_URLS || ENV.CLIENT_URL || "")
-  .split(",")
-  .map((origin) => origin.trim())
-  .filter(Boolean);
+const allowedOrigins = [
+  ...(ENV.CLIENT_URLS || "").split(","),
+  ...(ENV.CLIENT_URL || "").split(","),
+  // Render auto-injects this env var — ensures self-hosted frontend is never blocked
+  process.env.RENDER_EXTERNAL_URL || "",
+].map((o) => o.trim()).filter(Boolean);
 
 const io = new Server(server, {
   cors: {
+    // If no explicit origins configured, allow all (true) — safe when SERVE_FRONTEND=true
     origin: allowedOrigins.length > 0 ? allowedOrigins : true,
     credentials: true,
   },
